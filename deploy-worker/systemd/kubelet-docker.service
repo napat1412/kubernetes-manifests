@@ -4,13 +4,13 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-EnvironmentFile=/etc/kubernetes/kubernetes-worker.env
 ExecStartPre=-/usr/bin/mkdir -p /etc/kubernetes/manifests
 ExecStartPre=-/usr/bin/mkdir -p /var/log/containers
 ExecStartPre=-/usr/bin/mkdir -p /opt/cni/bin
 ExecStartPre=-/usr/sbin/ip addr flush dev docker0
 
-Environment=KUBELET_VERSION=v1.5.4_coreos.0
+EnvironmentFile=/etc/kubernetes/kubernetes-worker.env
+#Environment=KUBELET_VERSION=v1.5.4_coreos.0
 Environment="DOCKER_RUN_ARGS=--volume=/etc/resolv.conf:/etc/resolv.conf:ro \
   --volume=/var/log:/var/log:rw \
   --volume=/opt/cni/bin:/opt/cni/bin:rw \
@@ -19,7 +19,7 @@ Environment="DOCKER_RUN_ARGS=--volume=/etc/resolv.conf:/etc/resolv.conf:ro \
   --volume=/etc/ceph:/etc/ceph:ro"
 
 ExecStart=/opt/bin/kubelet-wrapper-docker \
-  --api-servers=${MASTER_HOST} \
+  --api-servers=${APISERVER_ENDPOINT} \
   --cni-conf-dir=/etc/kubernetes/cni/net.d \
   --network-plugin=${NETWORK_PLUGIN} \
   --container-runtime=docker \
@@ -29,7 +29,7 @@ ExecStart=/opt/bin/kubelet-wrapper-docker \
   --hostname-override=${ADVERTISE_IP} \
   --cluster-dns=${DNS_SERVICE_IP} \
   --cluster-domain=cluster.local \
-  --kubeconfig=/etc/kubernetes/ssl/worker-kubeconfig.yaml \
+  --kubeconfig=/etc/kubernetes/worker-kubeconfig.yaml \
   --tls-cert-file=/etc/kubernetes/ssl/worker.pem \
   --tls-private-key-file=/etc/kubernetes/ssl/worker-key.pem
 

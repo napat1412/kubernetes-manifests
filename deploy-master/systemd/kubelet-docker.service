@@ -5,11 +5,13 @@ Requires=docker.service
 
 [Service]
 EnvironmentFile=/etc/kubernetes/kubernetes-master.env
-ExecStartPre=-/usr/bin/mkdir -p /etc/kubernetes/manifests
 ExecStartPre=-/usr/bin/mkdir -p /var/log/containers
 ExecStartPre=-/usr/bin/mkdir -p /opt/cni/bin
 
 #Environment=KUBELET_VERSION=v1.5.4_coreos.0
+#Environment=NETWORK_PLUGIN=cni
+#Environment=ADVERTISE_IP=172.16.0.211
+#Environment=DNS_SERVICE_IP=172.17.0.10
 Environment="DOCKER_RUN_ARGS=--volume=/etc/resolv.conf:/etc/resolv.conf:ro \
   --volume=/var/log:/var/log:rw \
   --volume=/opt/cni/bin:/opt/cni/bin:rw \
