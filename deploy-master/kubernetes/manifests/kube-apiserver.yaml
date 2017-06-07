@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-name: kube-apiserver
+  name: kube-apiserver
   namespace: kube-system
 spec:
   hostNetwork: true
@@ -12,11 +12,12 @@ spec:
     - /hyperkube
     - apiserver
     - --bind-address=0.0.0.0
-    - --insecure-bind-address=0.0.0.0
+    - --secure-port=443
+    - --insecure-bind-address=127.0.0.1
+    - --insecure-port=8080
     - --etcd-servers=${ETCD_ENDPOINTS}
     - --allow-privileged=true
     - --service-cluster-ip-range=${SERVICE_IP_RANGE}
-    - --secure-port=443
     - --advertise-address=${ADVERTISE_IP}
     - --admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota
     - --tls-cert-file=/etc/kubernetes/ssl/apiserver.pem
