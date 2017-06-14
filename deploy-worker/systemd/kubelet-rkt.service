@@ -1,0 +1,44 @@
+[Unit]
+Description=Kubelet RKT Service
+After=docker.service
+Requires=docker.service
+
+[Service]
+ExecStartPre=-/usr/bin/mkdir -p /var/log/containers
+ExecStartPre=-/usr/bin/mkdir -p /opt/cni/bin
+ExecStartPre=-/usr/sbin/ip addr flush dev docker0
+
+EnvironmentFile=/etc/kubernetes/kubernetes-worker.env
+Environment="RKT_RUN_ARGS=--uuid-file-save=/var/run/kubelet-pod.uuid \
+  --volume dns,kind=host,source=/etc/resolv.conf \
+  --mount volume=dns,target=/etc/resolv.conf \
+  --volume var-log,kind=host,source=/var/log \
+  --mount volume=var-log,target=/var/log \
+  --volume cni-bin,kind=host,source=/opt/cni/bin \
+  --mount volume=cni-bin,target=/opt/cni/bin \
+  --volume modprobe,kind=host,source=/usr/sbin/modprobe \
+  --mount volume=modprobe,target=/usr/sbin/modprobe \
+  --volume lib-modules,kind=host,source=/lib/modules \
+  --mount volume=lib-modules,target=/lib/modules \
+  --volume etc-ceph,kind=host,source=/etc/ceph \
+  --mount volume=etc-ceph,target=/etc/ceph"
+
+ExecStart=/opt/bin/kubelet-wrapper \
+  --api-servers=${APISERVER_ENDPOINT} \
+  --cni-conf-dir=/etc/kubernetes/cni/net.d \
+  --network-plugin=${NETWORK_PLUGIN} \
+  --container-runtime=docker \
+  --register-node=true \
+  --allow-privileged=true \
+  --pod-manifest-path=/etc/kubernetes/manifests \
+  --hostname-override=${ADVERTISE_IP} \
+  --cluster-dns=${DNS_SERVICE_IP} \
+  --cluster-domain=cluster.local \
+  --kubeconfig=/etc/kubernetes/worker-kubeconfig.yaml \
+  --tls-cert-file=/etc/kubernetes/ssl/worker.pem \
+  --tls-private-key-file=/etc/kubernetes/ssl/worker-key.pem
+ExecStop=-/usr/bin/rkt stop --uuid-file=/var/run/kubelet-pod.uuid
+Restart=always
+RestartSec=30
+[Install]
+WantedBy=multi-user.target
