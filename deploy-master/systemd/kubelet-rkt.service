@@ -20,7 +20,7 @@ Environment="RKT_RUN_ARGS=--uuid-file-save=/var/run/kubelet-pod.uuid \
   --volume etc-ceph,kind=host,source=/etc/ceph \
   --mount volume=etc-ceph,target=/etc/ceph"
 
-ExecStart=/usr/lib/coreos/kubelet-wrapper \
+ExecStart=/opt/bin/kubelet-wrapper \
   --api-servers=http://127.0.0.1:8080 \
   --network-plugin-dir=/etc/kubernetes/cni/net.d \
   --network-plugin=cni \
