@@ -23,12 +23,13 @@ Environment="RKT_RUN_ARGS=--uuid-file-save=/var/run/kubelet-pod.uuid \
 ExecStart=/opt/bin/kubelet-wrapper \
   --api-servers=http://127.0.0.1:8080 \
   --network-plugin-dir=/etc/kubernetes/cni/net.d \
-  --network-plugin=cni \
+  --network-plugin=${NETWORK_PLUGIN} \
   --register-schedulable=false \
   --allow-privileged=true \
   --container-runtime=docker \
   --config=/etc/kubernetes/manifests \
-  --cluster-dns=172.17.0.10 \
+  --hostname-override=${ADVERTISE_IP} \
+  --cluster_dns=${DNS_SERVICE_IP} \
   --cluster-domain=cluster.local
 
 ExecStop=-/usr/bin/rkt stop --uuid-file=/var/run/kubelet-pod.uuid
