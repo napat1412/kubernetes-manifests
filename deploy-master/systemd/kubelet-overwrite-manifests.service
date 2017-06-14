@@ -9,6 +9,8 @@ ExecStartPre=/usr/bin/mkdir -p /opt/bin
 ExecStartPre=/usr/bin/mkdir -p /etc/kubernetes/manifests
 ExecStartPre=/usr/bin/mkdir -p /etc/kubernetes/cni/net.d
 
+ExecStartPre=/usr/bin/wget -q -O /opt/bin/kubelet-wrapper https://raw.githubusercontent.com/napat1412/kubernetes-manifests/v1.5.4/bin/kubelet-wrapper-docker
+ExecStartPre=/usr/bin/chmod +x /opt/bin/kubelet-wrapper
 ExecStartPre=/usr/bin/wget -q -O /opt/bin/kubelet-wrapper-docker https://raw.githubusercontent.com/napat1412/kubernetes-manifests/v1.5.4/bin/kubelet-wrapper-docker
 ExecStartPre=/usr/bin/chmod +x /opt/bin/kubelet-wrapper-docker
 ExecStartPre=/usr/bin/wget -q -O /opt/bin/sed.sh https://raw.githubusercontent.com/napat1412/kubernetes-manifests/v1.5.4/bin/sed.sh
