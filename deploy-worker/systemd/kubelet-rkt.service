@@ -23,6 +23,9 @@ Environment="RKT_RUN_ARGS=--uuid-file-save=/var/run/kubelet-pod.uuid \
   --volume etc-ceph,kind=host,source=/etc/ceph \
   --mount volume=etc-ceph,target=/etc/ceph"
 
+ExecStartPre=/usr/bin/docker pull quay.io/coreos/hyperkube:${KUBELET_IMAGE_TAG}
+ExecStartPre=/usr/bin/rkt trust --prefix="quay.io/coreos/hyperkube" --skip-fingerprint-review
+ExecStartPre=/usr/bin/rkt fetch quay.io/coreos/hyperkube:${KUBELET_IMAGE_TAG}
 ExecStart=/opt/bin/kubelet-wrapper \
   --api-servers=${APISERVER_ENDPOINT} \
   --cni-conf-dir=/etc/kubernetes/cni/net.d \
