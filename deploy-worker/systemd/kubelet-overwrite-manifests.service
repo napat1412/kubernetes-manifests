@@ -1,7 +1,5 @@
 [Unit]
-Description=Overwrite kubernetes manifests. This service read kubernetes-worker.env and certificate in /etc/kubernetes/ssl
-Wants=kubelet-docker.service
-After=kubelet-docker.service
+Description=Overwrite kubernetes manifests & install CNI. This service read kubernetes-worker.env and certificate in /etc/kubernetes/ssl
 
 [Service]
 Type=oneshot
@@ -24,4 +22,9 @@ ExecStartPre=/usr/bin/wget -q -O /etc/kubernetes/manifests/kube-proxy.yaml https
 
 EnvironmentFile=/etc/kubernetes/kubernetes-worker.env
 ExecStartPre=/opt/bin/sed.sh KUBELET_IMAGE_TAG ${KUBELET_IMAGE_TAG} /etc/kubernetes/manifests/kube-proxy.yaml
-ExecStart=/opt/bin/sed.sh APISERVER_ENDPOINT ${APISERVER_ENDPOINT} /etc/kubernetes/manifests/kube-proxy.yaml
+ExecStartPre=/opt/bin/sed.sh APISERVER_ENDPOINT ${APISERVER_ENDPOINT} /etc/kubernetes/manifests/kube-proxy.yaml
+
+ExecStartPre=/usr/bin/mkdir -p /opt/cni/bin
+ExecStartPre=/usr/bin/wget -q -O /opt/cni/cni-v0.4.0.tgz https://github.com/containernetworking/cni/releases/download/v0.4.0/cni-amd64-v0.4.0.tgz
+ExecStart=/usr/bin/tar -xvf /opt/cni/cni-v0.4.0.tgz -C /opt/cni/bin
+TimeoutSec=30min
