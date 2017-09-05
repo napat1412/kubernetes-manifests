@@ -26,6 +26,11 @@ spec:
     - --service-account-key-file=/etc/kubernetes/ssl/apiserver-key.pem
     - --runtime-config=extensions/v1beta1/networkpolicies=true
     - --anonymous-auth=false
+    - --etcd-cafile=/etc/kubernetes/ssl/ca.pem
+    - --etcd-certfile=/etc/kubernetes/ssl/client-apiserver.pem
+    - --etcd-keyfile=/etc/kubernetes/ssl/client-apiserver-key.pem
+    - --storage-backend=etcd2 
+    - --storage-media-type=application/json
     livenessProbe:
       httpGet:
         host: 127.0.0.1
