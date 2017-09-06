@@ -31,6 +31,7 @@ spec:
     - --etcd-keyfile=/etc/kubernetes/ssl/client-apiserver-key.pem
     - --storage-backend=etcd2 
     - --storage-media-type=application/json
+    - --apiserver-count=3
     livenessProbe:
       httpGet:
         host: 127.0.0.1
