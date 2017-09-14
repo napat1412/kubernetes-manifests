@@ -26,9 +26,9 @@ spec:
     - --service-account-key-file=/etc/kubernetes/ssl/apiserver-key.pem
     - --runtime-config=extensions/v1beta1/networkpolicies=true
     - --anonymous-auth=false
-    - --etcd-cafile=/etc/kubernetes/ssl/ca.pem
-    - --etcd-certfile=/etc/kubernetes/ssl/client-apiserver.pem
-    - --etcd-keyfile=/etc/kubernetes/ssl/client-apiserver-key.pem
+    - --etcd-cafile=/etc/etcd/etcd-tls-setup/certs/ca.pem
+    - --etcd-certfile=/etc/etcd/etcd-tls-setup/certs/client.pem
+    - --etcd-keyfile=/etc/etcd/etcd-tls-setup/certs/client-key.pem
     - --storage-backend=etcd2 
     - --storage-media-type=application/json
     - --apiserver-count=3
