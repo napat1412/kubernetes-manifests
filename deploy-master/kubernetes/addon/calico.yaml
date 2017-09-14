@@ -10,9 +10,9 @@ data:
 
   ### Configure for ETCD TLS cluster
   # etcd_endpoints: "http://172.16.0.213:2379"
-  # etcd_key_file: "/etc/kubernetes/ssl/client-apiserver-key.pem"
-  # etcd_cert_file: "/etc/kubernetes/ssl/client-apiserver.pem"
-  # etcd_ca_cert_file: "/etc/kubernetes/ssl/ca.pem"
+  # etcd_key_file: "/etc/etcd/etcd-tls-setup/certs/client-key.pem"
+  # etcd_cert_file: "/etc/etcd/etcd-tls-setup/certs/client.pem"
+  # etcd_ca_cert_file: "/etc/etcd/etcd-tls-setup/certs/ca.pem"
 
 
   # The CNI network configuration to install on each node.  The special
