@@ -2,6 +2,8 @@
 Description=Kubelet RKT Service
 
 [Service]
+User=root
+Group=root
 EnvironmentFile=/etc/kubernetes/kubernetes-master.env
 ExecStartPre=-/usr/bin/mkdir -p /var/log/containers
 ExecStartPre=-/usr/bin/mkdir -p /opt/cni/bin
@@ -37,6 +39,8 @@ ExecStart=/opt/bin/kubelet-wrapper \
   --cluster-domain=cluster.local
 
 ExecStop=-/usr/bin/rkt stop --uuid-file=/var/run/kubelet-pod.uuid
+ExecStopPost=-/opt/bin/kubelet-umount kubernetes\.io.cephfs
+ExecStopPost=-/opt/bin/kubelet-umount kubernetes\.io.rbd
 
 Restart=always
 RestartSec=30
