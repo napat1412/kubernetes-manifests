@@ -4,6 +4,8 @@ After=docker.service
 Requires=docker.service
 
 [Service]
+User=root
+Group=root
 ExecStartPre=-/usr/bin/mkdir -p /var/log/containers
 ExecStartPre=-/usr/bin/mkdir -p /opt/cni/bin
 ExecStartPre=-/usr/sbin/ip addr flush dev docker0
@@ -40,8 +42,12 @@ ExecStart=/opt/bin/kubelet-wrapper \
   --cluster-domain=cluster.local \
   --kubeconfig=/etc/kubernetes/worker-kubeconfig.yaml \
   --tls-cert-file=/etc/kubernetes/ssl/worker.pem \
-  --tls-private-key-file=/etc/kubernetes/ssl/worker-key.pem
+  --tls-private-key-file=/etc/kubernetes/ssl/worker-key.pem \
+  --pods-per-core=0 \
+  --max-pods=1000
 ExecStop=-/usr/bin/rkt stop --uuid-file=/var/run/kubelet-pod.uuid
+ExecStopPost=-/opt/bin/kubelet-umount kubernetes\.io.cephfs
+ExecStopPost=-/opt/bin/kubelet-umount kubernetes\.io.rbd
 Restart=always
 RestartSec=30
 TimeoutSec=30min

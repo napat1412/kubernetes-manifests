@@ -1,0 +1,13 @@
+#!/bin/bash
+if [ "$#" -ne 1 ]
+then
+  #$1 is part of mountpath which need to umount
+  echo "usage: $0 <kubernetes\.io.cephfs|kubernetes\.io.rbd>"
+  exit 0
+fi
+
+for mountpath in `df | grep $1 | awk '{print $6}' | sort | uniq`; 
+do
+  echo "umount: $mountpath"
+  umount -l $mountpath
+done
