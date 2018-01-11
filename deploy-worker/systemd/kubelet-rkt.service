@@ -26,7 +26,7 @@ Environment="RKT_RUN_ARGS=--uuid-file-save=/var/run/kubelet-pod.uuid \
   --mount volume=etc-ceph,target=/etc/ceph"
 
 ExecStartPre=/usr/bin/docker pull quay.io/coreos/hyperkube:${KUBELET_IMAGE_TAG}
-ExecStartPre=/usr/bin/rkt trust --prefix="quay.io/coreos/hyperkube" --skip-fingerprint-review
+ExecStartPre=-/usr/bin/rkt trust --prefix=quay.io/coreos/hyperkube --skip-fingerprint-review
 ExecStartPre=/usr/bin/rkt fetch quay.io/coreos/hyperkube:${KUBELET_IMAGE_TAG} --trust-keys-from-https
 ExecStart=/opt/bin/kubelet-wrapper \
   --api-servers=${APISERVER_ENDPOINT} \
